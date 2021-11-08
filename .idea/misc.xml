@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/pradaraar/PMDM/PradoDarribaAaronProyectoPMDM/app/src/main/res/layout/activity_listado.xml" value="0.20520833333333333" />
+        <entry key="..\:/pradaraar/PMDM/PradoDarribaAaronProyectoPMDM/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/pradaraar/PMDM/PradoDarribaAaronProyectoPMDM/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
+        <entry key="..\:/pradaraar/PMDM/PradoDarribaAaronProyectoPMDM/app/src/main/res/layout/activity_registro.xml" value="0.20520833333333333" />
+        <entry key="..\:/pradaraar/PMDM/PradoDarribaAaronProyectoPMDM/app/src/main/res/layout/item_pelicula.xml" value="0.33" />
         <entry key="..\:/pradaraar/PMDM/PradoDarribaAaronProyectoPMDM/app/src/main/res/layout/ventana_login.xml" value="0.28306159420289856" />
         <entry key="..\:/pradaraar/PMDM/PradoDarribaAaronProyectoPMDM/app/src/main/res/layout/ventana_registro.xml" value="0.2957427536231884" />
       </map>
