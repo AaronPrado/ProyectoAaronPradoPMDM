@@ -26,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
         btInicio.setOnClickListener{
             val intent = Intent(this, ListadoActivity::class.java)
             startActivity(intent)
+            //aaaa
         }
 
     }
