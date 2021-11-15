@@ -7,5 +7,4 @@ class Pelicula (
     var director: String,
     var valoracion: Int,
     var telefono: Long,
-
     )
