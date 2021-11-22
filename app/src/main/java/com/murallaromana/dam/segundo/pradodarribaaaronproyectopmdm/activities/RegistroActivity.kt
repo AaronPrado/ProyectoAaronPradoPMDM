@@ -18,24 +18,36 @@ class RegistroActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegistroBinding
 
+    private lateinit var btRegistrame: Button
+    private lateinit var tietEmail: TextInputEditText
+    private lateinit var tietContrasena: TextInputEditText
+    private lateinit var tietUsuario: TextInputEditText
+    private lateinit var tietNombre: TextInputEditText
+    private lateinit var tietTelefono: TextInputEditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRegistroBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        val etmail = findViewById<EditText>(R.id.tietEmail)
-        val btRegistrame = findViewById<Button>(R.id.btnRegistrame)
-        val tietEmail = findViewById<TextInputEditText>(R.id.tietEmail)
+        setTitle("Nuevo ususario")
+        btRegistrame = findViewById(R.id.btnRegistro)
+        tietNombre = findViewById(R.id.tietNombre)
+        tietEmail = findViewById(R.id.tietEmail)
+        tietContrasena = findViewById(R.id.tietContrasena)
+        tietUsuario = findViewById(R.id.tietUsuario)
+        tietTelefono = findViewById(R.id.tietTelefono)
+
 
         btRegistrame.setOnClickListener {
             var sharedPrefs = getPreferences(Context.MODE_PRIVATE)
             var editor = sharedPrefs.edit()
-            editor.putString("email", etmail.text.toString())
+            editor.putString("email", tietEmail.text.toString())
+            editor.putString("password", tietContrasena.text.toString())
+
+            editor.apply()
+            onBackPressed() // Vuelve atrás
             val intent = Intent(this, ListadoActivity::class.java)
             startActivity(intent)
         }
-
-
     }
 
     private fun validarEmail(email: String): Boolean {
