@@ -12,27 +12,14 @@
         android:padding="30dp"
         tools:context=".activities.RegistroActivity">
 
-        <TextView
-            android:id="@+id/tv_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="REGISTRO"
-            android:textColor="#000000"
-            android:textSize="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_nombre"
             android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_login">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tietNombre"
@@ -52,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/til_nombre">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietEmail"
+                android:id="@+id/tietEmailLogin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Email"
@@ -102,10 +89,10 @@
             app:layout_constraintTop_toBottomOf="@+id/til_username">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietDNI"
+                android:id="@+id/tietTelefono"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="DNI" />
+                android:hint="Telefono" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

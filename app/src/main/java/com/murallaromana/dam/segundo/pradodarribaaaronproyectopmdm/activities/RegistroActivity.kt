@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.R
@@ -18,24 +16,35 @@ class RegistroActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegistroBinding
 
+    private lateinit var btRegistrame: Button
+    private lateinit var tietEmail: TextInputEditText
+    private lateinit var tietContrasena: TextInputEditText
+    private lateinit var tietUsuario: TextInputEditText
+    private lateinit var tietNombre: TextInputEditText
+    private lateinit var tietTelefono: TextInputEditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val etmail = findViewById<EditText>(R.id.tietEmail)
-        val btRegistrame = findViewById<Button>(R.id.btnRegistrame)
-        val tietEmail = findViewById<TextInputEditText>(R.id.tietEmail)
+        setTitle("Nuevo usuario")
+        btRegistrame = findViewById(R.id.btnRegistrame)
+        tietNombre = findViewById(R.id.tietNombre)
+        tietEmail = findViewById(R.id.tietEmailLogin)
+        tietContrasena = findViewById(R.id.tietContrasena)
+        tietUsuario = findViewById(R.id.tietUsuario)
+        tietTelefono = findViewById(R.id.tietTelefono)
+
 
         btRegistrame.setOnClickListener {
-            var sharedPrefs = getPreferences(Context.MODE_PRIVATE)
-            var editor = sharedPrefs.edit()
-            editor.putString("email", etmail.text.toString())
-            val intent = Intent(this, ListadoActivity::class.java)
-            startActivity(intent)
+            val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
+            val editor = sharedPrefs.edit()
+            editor.putString("email", tietEmail.text.toString())
+            editor.putString("password", tietContrasena.text.toString())
+
+            onBackPressed()
         }
-
-
     }
 
     private fun validarEmail(email: String): Boolean {
@@ -46,14 +55,18 @@ class RegistroActivity : AppCompatActivity() {
     private fun comprobarDatos(): Boolean {
         val contrasena = binding.tietContrasena.text.toString()
 
-        if (validarEmail(binding.tietEmail.text.toString())) {
+        if (validarEmail(binding.tietEmailLogin.text.toString())) {
             Toast.makeText(this, "Introduce un email válido", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
+        else if(contrasena.length < 8 || contrasena.length >14){
+            Toast.makeText(this, "Introduce una contraseña válida", Toast.LENGTH_SHORT)
                 .show()
             return false
         }
         else{
             return true
         }
-
     }
 }

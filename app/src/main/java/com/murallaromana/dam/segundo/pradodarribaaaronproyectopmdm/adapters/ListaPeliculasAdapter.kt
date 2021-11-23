@@ -15,6 +15,9 @@ class ListaPeliculasAdapter(val peliculas: List<Pelicula>) : RecyclerView.Adapte
          val tvGenero = itemView.findViewById<TextView>(R.id.tvGenero)
          val tvDirector = itemView.findViewById<TextView>(R.id.tvDirector)
          val tvValoracion = itemView.findViewById<TextView>(R.id.tvValoracion)
+
+
+
      }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeliculasHolder {
@@ -30,7 +33,7 @@ class ListaPeliculasAdapter(val peliculas: List<Pelicula>) : RecyclerView.Adapte
         holder.tvTitulo.setText(pelicula.titulo)
         holder.tvGenero.setText(pelicula.genero)
         holder.tvDirector.setText(pelicula.director)
-        holder.tvValoracion.setText(pelicula.valoracion)
+        holder.tvValoracion.setText(pelicula.valoracion.toString())
 
     }
 
