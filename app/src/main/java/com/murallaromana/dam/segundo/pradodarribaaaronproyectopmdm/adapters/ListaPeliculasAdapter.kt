@@ -3,10 +3,12 @@ package com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.R
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.modelo.entities.Pelicula
+import com.squareup.picasso.Picasso
 
 class ListaPeliculasAdapter(val peliculas: List<Pelicula>) : RecyclerView.Adapter<ListaPeliculasAdapter.PeliculasHolder>() {
 
@@ -15,7 +17,7 @@ class ListaPeliculasAdapter(val peliculas: List<Pelicula>) : RecyclerView.Adapte
          val tvGenero = itemView.findViewById<TextView>(R.id.tvGenero)
          val tvDirector = itemView.findViewById<TextView>(R.id.tvDirector)
          val tvValoracion = itemView.findViewById<TextView>(R.id.tvValoracion)
-
+         val ivImagen = itemView.findViewById<ImageView>(R.id.ivImagen)
 
 
      }
@@ -34,6 +36,7 @@ class ListaPeliculasAdapter(val peliculas: List<Pelicula>) : RecyclerView.Adapte
         holder.tvGenero.setText(pelicula.genero)
         holder.tvDirector.setText(pelicula.director)
         holder.tvValoracion.setText(pelicula.valoracion.toString())
+        Picasso.get().load(pelicula.imagen).into(holder.ivImagen)
 
     }
 
