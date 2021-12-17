@@ -29,6 +29,7 @@ class RegistroActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setTitle("Nuevo usuario")
+
         btRegistrame = findViewById(R.id.btnRegistrame)
         tietNombre = findViewById(R.id.tietNombre)
         tietEmail = findViewById(R.id.tietEmailLogin)

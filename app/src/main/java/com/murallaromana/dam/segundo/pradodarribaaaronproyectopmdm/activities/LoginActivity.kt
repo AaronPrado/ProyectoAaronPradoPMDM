@@ -19,6 +19,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        title = "Login"
+
         val sharedPreferences = getSharedPreferences("datos", Context.MODE_PRIVATE)
 
         btRegistro = findViewById(R.id.btnRegistro)
@@ -26,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
         tietEmailLogin = findViewById(R.id.tietEmailLogin)
         tietContrasenaLogin = findViewById(R.id.tietContrasenaLogin)
 
-        val email = sharedPreferences.getString("email", "nombreusuario@mail.com")
+        val email = sharedPreferences.getString("email", "nombreusuario@gmail.com")
         val pwd = sharedPreferences.getString("password", "contraseña")
 
         tietEmailLogin.setText(email)

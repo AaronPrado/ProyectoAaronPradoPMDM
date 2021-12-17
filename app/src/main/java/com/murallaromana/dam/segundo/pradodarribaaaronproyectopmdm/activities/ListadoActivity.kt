@@ -19,6 +19,8 @@ class ListadoActivity  : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        title="Lista de Películas"
+
         binding = ActivityListadoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

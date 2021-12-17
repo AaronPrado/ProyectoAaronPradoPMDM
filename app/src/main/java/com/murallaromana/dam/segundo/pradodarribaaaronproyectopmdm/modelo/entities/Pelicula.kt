@@ -1,10 +1,11 @@
 package com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.modelo.entities
 
-class Pelicula (
+class Pelicula(
 
     var titulo: String,
     var genero: String,
     var director: String,
-    var valoracion: Double,
-    var imagen: String
+    var valoracion: String,
+    var imagen: String,
+    var telefono: String
     )
