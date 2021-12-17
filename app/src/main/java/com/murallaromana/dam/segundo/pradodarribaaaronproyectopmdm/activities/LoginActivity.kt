@@ -43,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, ListadoActivity::class.java)
             startActivity(intent)
 
+
         }
     }
 }

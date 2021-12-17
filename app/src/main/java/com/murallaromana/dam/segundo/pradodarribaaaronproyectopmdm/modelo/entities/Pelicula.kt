@@ -1,6 +1,8 @@
 package com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.modelo.entities
 
-class Pelicula(
+import java.io.Serializable
+
+data class Pelicula(
 
     var titulo: String,
     var genero: String,
@@ -8,4 +10,4 @@ class Pelicula(
     var valoracion: String,
     var imagen: String,
     var telefono: String
-    )
+    ):Serializable

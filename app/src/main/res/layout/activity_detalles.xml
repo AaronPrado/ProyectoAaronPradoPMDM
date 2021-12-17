@@ -49,7 +49,7 @@
             android:focusableInTouchMode="false"
             android:hint="Nota: "
             android:inputType="number"
-            android:maxLength="2"
+            android:maxLength="3"
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
