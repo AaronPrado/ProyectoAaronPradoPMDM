@@ -1,10 +1,11 @@
-package com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm
+package com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.activities
 
 import android.app.Application
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.modelo.entities.Pelicula
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.modelo.dao.PeliculasDaoImpl
 
 class App : Application() {
+
     companion object {
         var peliculas: ArrayList<Pelicula> = ArrayList()
     }
@@ -13,5 +14,5 @@ class App : Application() {
         super.onCreate()
 
         val dao = PeliculasDaoImpl()
-        peliculas= dao.getTodos()    }
+        peliculas = dao.getTodos()    }
 }

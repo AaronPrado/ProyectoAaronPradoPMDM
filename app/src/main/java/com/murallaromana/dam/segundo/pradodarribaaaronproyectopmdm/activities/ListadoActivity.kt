@@ -6,12 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.activities.App
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.R
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.adapters.ListaPeliculasAdapter
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.databinding.ActivityListadoBinding
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.modelo.dao.PeliculasDaoImpl
 
-class ListadoActivity  : AppCompatActivity() {
+class ListadoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityListadoBinding
     private lateinit var btAdd: FloatingActionButton
@@ -19,7 +20,7 @@ class ListadoActivity  : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        title="Lista de Películas"
+        title = "Lista de Películas"
 
         binding = ActivityListadoBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -29,6 +30,8 @@ class ListadoActivity  : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         val adapter = ListaPeliculasAdapter(listaPeliculas)
+
+
 
         binding.rvPeliculasList.adapter = adapter
         binding.rvPeliculasList.layoutManager = layoutManager
@@ -44,5 +47,12 @@ class ListadoActivity  : AppCompatActivity() {
             val intent = Intent(this, DetallesActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val adapter = ListaPeliculasAdapter(App.peliculas)
+        binding.rvPeliculasList.adapter = adapter
     }
 }

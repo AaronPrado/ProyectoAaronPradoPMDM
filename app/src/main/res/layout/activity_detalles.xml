@@ -12,17 +12,40 @@
     android:layout_height="match_parent">
     tools:context=".activities.DetallesActivity">
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiImagen"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tiGenero">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Url Imagen:" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <ImageView
         android:id="@+id/ivImagenDetalles"
-        tools:srcCompat="@tools:sample/avatars"
         android:layout_width="300dp"
         android:layout_height="350dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.414"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tiNota"
@@ -32,11 +55,9 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tiGenero">
+        app:layout_constraintTop_toBottomOf="@+id/tiImagen">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNota"
@@ -44,12 +65,12 @@
             android:layout_height="50dp"
             android:clickable="false"
             android:cursorVisible="false"
-            android:digits="1234567890"
+            android:digits="1234567890."
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:hint="Nota: "
             android:inputType="number"
-            android:maxLength="2"
+            android:maxLength="3"
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -110,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.476"
@@ -158,13 +179,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="1dp"
         android:backgroundTint="@color/primaryColor"
         android:enabled="true"
         android:src="@drawable/ic_baseline_phone_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintHorizontal_bias="0.788"
         app:layout_constraintStart_toEndOf="@+id/tiTelefonoD"
         app:layout_constraintTop_toBottomOf="@+id/tiDirector" />
 

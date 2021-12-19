@@ -39,12 +39,14 @@ class RegistroActivity : AppCompatActivity() {
 
 
         btRegistrame.setOnClickListener {
-            val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
-            val editor = sharedPrefs.edit()
-            editor.putString("email", tietEmail.text.toString())
-            editor.putString("password", tietContrasena.text.toString())
+            if(comprobarDatos()){
+                val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
+                val editor = sharedPrefs.edit()
+                editor.putString("email", tietEmail.text.toString())
+                editor.putString("password", tietContrasena.text.toString())
 
-            onBackPressed()
+                onBackPressed()
+            }
         }
     }
 
@@ -54,20 +56,16 @@ class RegistroActivity : AppCompatActivity() {
     }
 
     private fun comprobarDatos(): Boolean {
-        val contrasena = binding.tietContrasena.text.toString()
+        val pwd = tietContrasena.text.toString()
 
-        if (validarEmail(binding.tietEmailLogin.text.toString())) {
-            Toast.makeText(this, "Introduce un email válido", Toast.LENGTH_SHORT)
+        if (!validarEmail(tietEmail.text.toString())) {
+            Toast.makeText(this, "Correo incorrecto", Toast.LENGTH_SHORT).show()
+            return false
+        } else if (pwd.length < 8 || pwd.length > 20) {
+            Toast.makeText(this, "La contraseña no tiene la longitud correcta", Toast.LENGTH_SHORT)
                 .show()
             return false
         }
-        else if(contrasena.length < 8 || contrasena.length >14){
-            Toast.makeText(this, "Introduce una contraseña válida", Toast.LENGTH_SHORT)
-                .show()
-            return false
-        }
-        else{
-            return true
-        }
+        return true
     }
 }
