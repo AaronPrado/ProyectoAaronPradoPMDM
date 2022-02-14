@@ -37,11 +37,11 @@ class ListaPeliculasAdapter(val peliculas: List<Pelicula>) : RecyclerView.Adapte
     override fun onBindViewHolder(holder: PeliculasHolder, position: Int) {
         val pelicula = peliculas.get(position)
 
-        holder.tvTitulo.setText(pelicula.titulo)
+        holder.tvTitulo.setText(pelicula.nombre)
         holder.tvGenero.setText(pelicula.genero)
         holder.tvDirector.setText(pelicula.director)
-        holder.tvValoracion.setText(pelicula.valoracion)
-        Picasso.get().load(pelicula.imagen).into(holder.ivImagen)
+        holder.tvValoracion.setText(pelicula.nota.toString())
+        Picasso.get().load(pelicula.url).into(holder.ivImagen)
 
         holder.btDetalles.setOnClickListener {
             Toast.makeText(holder.itemView.context, holder.tvTitulo.text, Toast.LENGTH_SHORT).show()

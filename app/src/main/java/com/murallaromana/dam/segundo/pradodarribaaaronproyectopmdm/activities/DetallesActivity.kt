@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -11,9 +12,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.R
+import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.RetrofitClient
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.databinding.ActivityDetallesBinding
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.modelo.entities.Pelicula
 import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DetallesActivity : AppCompatActivity() {
 
@@ -24,6 +29,7 @@ class DetallesActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        val infoPel = intent.extras?.get("peliculaId") as String?
         binding = ActivityDetallesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -33,17 +39,42 @@ class DetallesActivity : AppCompatActivity() {
 
         if (existePelicula != null) {
 
-            title = existePelicula.titulo
+            val sharedPreferences = getSharedPreferences("datos", MODE_PRIVATE)
+            val token = sharedPreferences.getString("token", "No encontrado")
 
-            binding.etTitulo.setText(existePelicula.titulo)
-            binding.etDirector.setText(existePelicula.director)
-            binding.etGenero.setText(existePelicula.genero)
-            binding.etNota.setText(existePelicula.valoracion)
-            binding.etUrl.setText(existePelicula.imagen)
-            binding.etTelefonoD.setText(existePelicula.telefono.replace(" ", ""))
-            Picasso.get().load(existePelicula.imagen).into(binding.ivImagenDetalles)
+            val llamadaApi: Call<Pelicula>? =
+                infoPel?.let { RetrofitClient.apiRetrofit.getById("Bearer $token", it) }
+            if (llamadaApi != null) {
+                llamadaApi.enqueue(object : Callback<Pelicula> {
+                    override fun onResponse(call: Call<Pelicula>, response: Response<Pelicula>) {
+                        if (response.code() > 299 || response.code() < 200) {
+                            Toast.makeText(
+                                this@DetallesActivity,
+                                "No se pudo cargar la pelicula",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            val peliculaDetalles = response.body()!!
 
-            binding.btLlamar.isEnabled = true
+                            title = peliculaDetalles.nombre
+                            binding.etTitulo.setText(peliculaDetalles.nombre)
+                            binding.etDirector.setText(peliculaDetalles.director)
+                            binding.etGenero.setText(peliculaDetalles.genero)
+                            binding.etNota.setText(peliculaDetalles.nota.toString())
+                            binding.etUrl.setText(peliculaDetalles.url)
+                            binding.etTelefonoD.setText(peliculaDetalles.telefono)
+
+                            Picasso.get().load(peliculaDetalles.url).into(binding.ivImagenDetalles)
+
+                            binding.btLlamar.isEnabled = true
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Pelicula>, t: Throwable) {
+                        Log.d("response: failure", t.message.toString())
+                    }
+                })
+            }
 
         } else {
 
@@ -124,22 +155,46 @@ class DetallesActivity : AppCompatActivity() {
                         binding.etGenero.isFocusable = false
                         binding.etTelefonoD.isFocusable = false
 
-                        val position: Int? = intent.extras?.get("position") as Int?
-                        if (position != null) {
-                            App.peliculas.removeAt(position)
-                            App.peliculas.add(
-                                Pelicula(
-                                    binding.etTitulo.text.toString(),
-                                    binding.etGenero.text.toString(),
-                                    binding.etDirector.text.toString(),
-                                    binding.etNota.text.toString(),
-                                    binding.etUrl.text.toString(),
-                                    binding.etTelefonoD.text.toString()
-                                )
-                            )
+
+                        val sharedPreferences = getSharedPreferences("datos", MODE_PRIVATE)
+                        val token = sharedPreferences.getString("token", "No encontrado")
+                        val pelicula = Pelicula(
+                            binding.etTitulo.text.toString(),
+                            binding.etGenero.text.toString(),
+                            binding.etDirector.text.toString(),
+                            binding.etNota.text.toString().toDouble(),
+                            binding.etUrl.text.toString(),
+                            binding.etTelefonoD.text.toString(),
+                            binding.etDuracion.text.toString().toInt(),
+
+                        )
+                        val llamadaApi: Call<Unit> = RetrofitClient.apiRetrofit.actualizarPeliculas(
+                            "Bearer $token",
+                            pelicula
+                        )
+                        llamadaApi.enqueue(object : Callback<Unit> {
+                            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                                if (response.code() > 299 || response.code() < 200) {
+                                    Toast.makeText(
+                                        this@DetallesActivity,
+                                        "No se pudo actualizar",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        this@DetallesActivity,
+                                        "Película actualizada",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                                Log.d("response: failure", t.message.toString())
+                            }
+                        })
 
                             finish()
-                        }
                     }
                     .setNegativeButton("Cancelar", null)
                     .create()
@@ -148,6 +203,7 @@ class DetallesActivity : AppCompatActivity() {
             }
 
             return true
+
         } else if (item.itemId == R.id.accion_add) {
             if (TextUtils.equals(
                     binding.etTitulo.text.toString(),
@@ -169,35 +225,53 @@ class DetallesActivity : AppCompatActivity() {
                     binding.etTelefonoD.text.toString(),
                     ""
                 )
+                || TextUtils.equals(
+                    binding.etDuracion.text.toString(),
+                    ""
+                )
             ) {
                 Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT)
                     .show()
             } else {
-                App.peliculas.add(
-                    Pelicula(
-                        binding.etTitulo.text.toString(),
-                        binding.etGenero.text.toString(),
-                        binding.etDirector.text.toString(),
-                        binding.etNota.text.toString(),
-                        binding.ivImagenDetalles.toString(),
-                        binding.etTelefonoD.text.toString()
-                    )
-                )
-
-                finish()
-            }
-
-            return true
-        } else if (item.itemId == R.id.accion_borrar) {
-            if (marca) {
                 val builder = AlertDialog.Builder(this)
-                val dialog = builder.setTitle("Borrar pelicula")
-                    .setMessage("Vas a borrar una pelicula")
+                val dialog = builder.setTitle("Crear nueva pelicula")
+                    .setMessage("Vas a  crear una nueva pelicula")
                     .setPositiveButton("Aceptar") { _, _ ->
-                        val position: Int? = intent.extras?.get("position") as Int?
-                        if (position != null) {
-                            App.peliculas.removeAt(position)
-                        }
+                        val sharedPreferences = getSharedPreferences("datos", MODE_PRIVATE)
+                        val token = sharedPreferences.getString("token", "No encontrado")
+                        val pelicula = Pelicula(
+                            binding.etTitulo.text.toString(),
+                            binding.etGenero.text.toString(),
+                            binding.etDirector.text.toString(),
+                            binding.etNota.text.toString().toDouble(),
+                            binding.etUrl.text.toString(),
+                            binding.etTelefonoD.text.toString(),
+                            binding.etDuracion.text.toString().toInt()
+                        )
+
+                        val llamadaApi: Call<Unit> = RetrofitClient.apiRetrofit.createPeliculas("Bearer $token", pelicula)
+                        llamadaApi.enqueue(object : Callback<Unit> {
+                            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                                if (response.code() > 299 || response.code() < 200) {
+                                    Toast.makeText(
+                                        this@DetallesActivity,
+                                        "Error al añadir la película",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        this@DetallesActivity,
+                                        "Película añadida correctamente",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                                Log.d("response: failure", t.message.toString())
+                            }
+                        })
+
 
                         finish()
                     }
@@ -208,7 +282,57 @@ class DetallesActivity : AppCompatActivity() {
             }
 
             return true
-        } else {
+        } else if (item.itemId == R.id.accion_borrar) {
+            if (marca) {
+                val pos = intent.extras?.get("pos") as String?
+                val sharedPreferences = getSharedPreferences("datos", MODE_PRIVATE)
+                val token = sharedPreferences.getString("token", "No encontrado")
+
+                val builder = AlertDialog.Builder(this)
+                val dialog = builder.setTitle("Borrar pelicula")
+                    .setMessage("Vas a borrar una pelicula")
+                    .setPositiveButton("Aceptar") { dialog, id ->
+                        val llamadaApi: Call<Unit> =
+                            RetrofitClient.apiRetrofit.borrarPeliculas(
+                                "Bearer $token",
+                                pos
+                            )
+                        llamadaApi.enqueue(object : Callback<Unit> {
+                            override fun onResponse(
+                                call: Call<Unit>,
+                                response: Response<Unit>
+                            ) {
+                                if (response.code() > 299 || response.code() < 200) {
+                                    Toast.makeText(
+                                        this@DetallesActivity,
+                                        "Error al borrar la película",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        this@DetallesActivity,
+                                        "Película borrada",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                                Log.d("response: failure", t.message.toString())
+                            }
+                        })
+                        finish()
+                    }
+                    .setNegativeButton("Cancelar", null)
+                    .create()
+
+                dialog.show()
+            }
+
+            return true
+        }
+
+        else {
             return super.onOptionsItemSelected(item)
         }
     }

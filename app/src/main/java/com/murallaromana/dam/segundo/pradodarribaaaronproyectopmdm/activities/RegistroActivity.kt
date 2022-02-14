@@ -1,51 +1,63 @@
 package com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.activities
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.R
+import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.RetrofitClient
 import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.databinding.ActivityRegistroBinding
+import com.murallaromana.dam.segundo.pradodarribaaaronproyectopmdm.modelo.entities.Usuario
 import java.util.regex.Pattern
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegistroActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegistroBinding
 
-    private lateinit var btRegistrame: Button
-    private lateinit var tietEmail: TextInputEditText
-    private lateinit var tietContrasena: TextInputEditText
-    private lateinit var tietUsuario: TextInputEditText
-    private lateinit var tietNombre: TextInputEditText
-    private lateinit var tietTelefono: TextInputEditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val context = this
 
-        setTitle("Nuevo usuario")
+        binding.btnRegistrame.setOnClickListener {
 
-        btRegistrame = findViewById(R.id.btnRegistrame)
-        tietNombre = findViewById(R.id.tietNombre)
-        tietEmail = findViewById(R.id.tietEmailLogin)
-        tietContrasena = findViewById(R.id.tietContrasena)
-        tietUsuario = findViewById(R.id.tietUsuario)
-        tietTelefono = findViewById(R.id.tietTelefono)
+            if (comprobarDatos()) {
+                val email = binding.tietEmail.text.toString()
+                val pwd = binding.tietContrasena.text.toString()
 
+                val call: Call<Usuario> = RetrofitClient.apiRetrofit.signup(Usuario(email,pwd))
 
-        btRegistrame.setOnClickListener {
-            if(comprobarDatos()){
-                val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
-                val editor = sharedPrefs.edit()
-                editor.putString("email", tietEmail.text.toString())
-                editor.putString("password", tietContrasena.text.toString())
+                call.enqueue(object : Callback<Usuario> {
+                    override fun onResponse(call: Call<Usuario>,response: Response<Usuario>) {
 
-                onBackPressed()
+                        if (response.isSuccessful) {
+                            Toast.makeText(this@RegistroActivity, "Usuario creado con éxito", Toast.LENGTH_SHORT)
+                                .show()
+                                val intent = Intent(context, LoginActivity::class.java)
+                                startActivity(intent)
+                        }
+                        else {
+                            Toast.makeText(this@RegistroActivity, "Error al crear el usuario", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Usuario>, t: Throwable) {
+                        Log.d("respuesta: onFailure", t.toString())
+                    }
+                })
             }
         }
     }
@@ -56,16 +68,16 @@ class RegistroActivity : AppCompatActivity() {
     }
 
     private fun comprobarDatos(): Boolean {
-        val pwd = tietContrasena.text.toString()
+        val pwd = binding.tietContrasena.text.toString()
 
-        if (!validarEmail(tietEmail.text.toString())) {
-            Toast.makeText(this, "Correo incorrecto", Toast.LENGTH_SHORT).show()
+        if (validarEmail(binding.tietEmail.text.toString()) == false) {
+            Toast.makeText(this, "Email no válido", Toast.LENGTH_SHORT).show()
             return false
-        } else if (pwd.length < 8 || pwd.length > 20) {
-            Toast.makeText(this, "La contraseña no tiene la longitud correcta", Toast.LENGTH_SHORT)
-                .show()
+        } else if (pwd.length < 5 || pwd.length > 10) {
+            Toast.makeText(this, "Longitud de contraseña incorrecta", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
     }
+
 }
