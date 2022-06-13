@@ -17,7 +17,7 @@
 
 **3.Lista de peliculas:**
 
-![Lista de peliculas](./Imagenes/lista.png)
+![Lista de peliculas](./Imagenes/lista.PNG)
 
 **4.Añadir/Editar peliculas:**
 
